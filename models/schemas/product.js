@@ -7,7 +7,7 @@ var productSchema = mongoose.Schema({
 });
 
 //Verbose toString method
-productSchema.methods.whatAmI = function () {
+productSchema.methods.display = function () {
     var name = this.name || 'Unidentified product';
     return name + ' worth ' + this.prettyPrice();
 };

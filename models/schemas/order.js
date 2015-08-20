@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var lineItemSchema = require('./lineItem');
+var lineItemSchema = require('./line-item');
 
 //Define a super simple schema for our products.
 var orderSchema = mongoose.Schema({
