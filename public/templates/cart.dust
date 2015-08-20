@@ -16,7 +16,7 @@
         </div>
 
         <div class="ccForm inline">
-            <h3>Total: ${cart.total}</h3>
+            <h3>Payment Total ${cart.total}</h3>
             <fieldset>
                 <form method="post" action="/pay">
                     <input name="cc" placeholder="CC #" value="4532649989162709" maxlength="16"><br>

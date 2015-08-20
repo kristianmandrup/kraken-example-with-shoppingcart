@@ -1,5 +1,5 @@
 'use strict';
-var Product = require('../../models/productModel');
+var Product = require('../../models/product');
 var getBundle = require('../../lib/getBundle');
 
 module.exports = function (router) {
@@ -25,23 +25,46 @@ module.exports = function (router) {
 			return;
 		}
 
+		console.log('Display cart!!');
+
 		//Ready the products for display
 		for (var item in cart) {
+			console.log('item', item);
+			var cartItem = cart[item];
 			displayCart.items.push(cart[item]);
+			console.log();
 			total += (cart[item].qty * cart[item].price);
 		}
+		console.log('Display total!!');
+
 		req.session.total = displayCart.total = total.toFixed(2);
 		cartLength = Object.keys(cart).length;
+
 		var model =
 		{
 			cart: displayCart
 		};
+
 		res.bundle.get({'bundle': 'messages', 'model': {'cartItemLength': cartLength}, 'locality': locality}, function bundleReturn(err, messages) {
 			model.itemsInCart = messages.items;
 			res.render('cart', model);
 		});
 
 	});
+
+	function populateCart(cart, orderObj) {
+		//Add or increase the product quantity in the shopping cart.
+		var id = orderObj.product.id;
+		if (cart[id]) {
+			cart[id].qty += orderObj.qty;
+		}
+		else {
+			var LineItem = require('../../models/line-item');
+			var newLineItem = new LineItem({product: product.obj, qty: orderObj.qty});
+			cart[id] = newLineItem;
+		}
+		return cart;
+	}
 
 	/**
 	 * Add an item to the shopping cart
@@ -53,28 +76,23 @@ module.exports = function (router) {
 		var cart = req.session.cart;
 
 		//Read the incoming product data
-		var id = req.param('item_id');
+		var id = req.param('product_id');
+		var qty = req.param('qty') || 1;
 
 		//Locate the product to be added
-		Product.findById(id, function (err, prod) {
+		Product.findById(id, function (err, product) {
 			if (err) {
-				console.log('Error adding product to cart: ', err);
 				res.redirect('/cart');
 				return;
 			}
-
-			//Add or increase the product quantity in the shopping cart.
-			if (cart[id]) {
-				cart[id].qty++;
+			var orderObj = {
+				qty: qty,
+				product: {
+					id: id,
+					obj : product
+				}
 			}
-			else {
-				cart[id] = {
-					name: prod.name,
-					price: prod.price,
-					prettyPrice: prod.prettyPrice(),
-					qty: 1
-				};
-			}
+			populateCart(cart, orderObj);
 
 			res.redirect('/cart');
 

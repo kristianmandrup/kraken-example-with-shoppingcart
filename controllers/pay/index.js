@@ -57,6 +57,10 @@ module.exports = function (router) {
 			description: 'Your Kraken Store Purchase'
 		};
 
+		var cart = req.session.cart;
+		var Order = require('../../models/order');
+		var order = new Order({lineItems: cart.lineItems})
+
 		//Execute the payment.
 		paypal.payment.create(payment, {}, function (err, resp) {
 			if (err) {
@@ -71,6 +75,8 @@ module.exports = function (router) {
 				delete req.session.cart;
 				delete req.session.displayCart;
 				res.bundle.get({'bundle': 'messages', 'model': {}, 'locality': locality}, function bundleReturn(err, messages) {
+					order.status = 'paid';
+
 					res.render('result', {'result': messages.paymentSuccess, 'continueMessage': messages.keepShopping});
 				});
 			}

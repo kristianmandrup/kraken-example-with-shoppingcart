@@ -2,7 +2,7 @@
  * A very simple product editor
  */
 'use strict';
-var Product = require('../../models/productModel');
+var Product = require('../../models/product');
 
 module.exports = function (router) {
 
@@ -60,7 +60,7 @@ module.exports = function (router) {
 		var newProduct = new Product({name: name, price: price});
 
 		//Show it in console for educational purposes...
-		newProduct.whatAmI();
+		// newProduct.whatAmI();
 		/* The call back recieves to more arguments ->product/s that is/are added to the database
 		 and number of rows that are affected because of save, which right now are ignored
 		 only errors object is consumed*/
@@ -75,10 +75,10 @@ module.exports = function (router) {
 
 	/**
 	 * Delete a product.
-	 * @paaram: req.body.item_id Is the unique id of the product to remove.
+	 * @paaram: req.body.product_id Is the unique id of the product to remove.
 	 */
 	router.delete('/', function (req, res) {
-		Product.remove({_id: req.body.item_id}, function (err) {
+		Product.remove({_id: req.body.product_id}, function (err) {
 			if (err) {
 				console.log('Remove error: ', err);
 			}

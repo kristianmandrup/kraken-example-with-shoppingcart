@@ -12,8 +12,8 @@
 				{#products}
 					<li>
 						<form method="POST" action="cart">
-							<input type="hidden" name="item_id" value="{.id}">
-
+							<input type="hidden" name="product_id" value="{.id}">
+              <input type="text" value="1" name="qty">
 							<h3 class="nm-np">{.name}</h3>
 							<h4 class="nm-np">{.prettyPrice}</h4>
 							<input type="submit" value="{@pre type="content" key="addToCart"/}">

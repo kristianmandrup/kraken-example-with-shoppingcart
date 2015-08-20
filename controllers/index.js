@@ -1,7 +1,7 @@
 'use strict';
 
 
-var Product = require('../models/productModel');
+var Product = require('../models/product');
 
 
 module.exports = function (router) {
