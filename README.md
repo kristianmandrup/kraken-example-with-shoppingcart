@@ -3,6 +3,10 @@ with.shoppingcart
 
 Kraken with Shopping Cart and PayPal integration
 
+Now includes `Line Items` with a # of `Products`. A set of Line Items make up an `Order` when payment is initiated. An order references a Payer (user data) and can have status `initiated` and `paid`.
+
+Future: Get inspiration from [Phrixus](https://github.com/apigee-127/phrixus) a more complete solution!!
+
 Prerequisites
 -------------
 
