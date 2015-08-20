@@ -7,6 +7,28 @@ Now includes `Line Items` with a # of `Products`. A set of Line Items make up an
 
 Future: Get inspiration from [Phrixus](https://github.com/apigee-127/phrixus) a more complete solution!!
 
+See Mongoose Schema: https://thecodebarbarian.wordpress.com/2013/06/06/61/
+
+Use `ObjectID` and `ref` to avoid lists of sub documents approach used now!
+
+```js
+var UserSchema = new Mongoose.Schema({
+  username : { type : String },
+  image : { type : Mongoose.Schema.ObjectId, ref : 'images' }
+});
+```
+
+But will be MUCH easier to implement via Keystone. See [Keystone example](https://github.com/Automattic/mongoose/issues/1888)
+
+```js
+Post.add({
+    author: { type: Types.Relationship, ref: 'User' },
+    categories: { type: Types.Relationship, ref: 'PostCategory', many: true }
+});
+```
+
+Another option is [mongo-relation](https://www.npmjs.com/package/mongo-relation)
+
 Prerequisites
 -------------
 
