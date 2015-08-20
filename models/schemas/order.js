@@ -1,13 +1,16 @@
 var mongoose = require('mongoose');
 
 var lineItemSchema = require('./line-item');
+var payerSchema = require('./payer');
 
-//Define a super simple schema for our products.
+var timestamps = require('mongoose-timestamp');
+
 var orderSchema = mongoose.Schema({
-    id: String,
     status: String,
+    payers: [payerSchema],
     lineItems: [lineItemSchema]
 });
+orderSchema.plugin(timestamps);
 
 //Verbose toString method
 orderSchema.methods.display = function () {
@@ -16,7 +19,7 @@ orderSchema.methods.display = function () {
   }).join('\n');
 };
 
-//Format the price of the product to show a dollar sign, and two decimal places
+// calc total price of all lineItems
 orderSchema.methods.totalPrice = function () {
   return this.lineItems.reduce(function(pv, cv) { return pv.price + cv.price; }, 0);
 };

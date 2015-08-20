@@ -9,7 +9,7 @@
                 {#cart.items}
                     <li>
                         <h3 class="nm-np">{.qty} x {.name}</h3>
-                        <h4 class="nm-np">Price: {.prettyPrice} ea.</h4>
+                        <h4 class="nm-np">Price: {.displayPrice} ea.</h4>
                     </li>
                 {/cart.items}
             </ul>

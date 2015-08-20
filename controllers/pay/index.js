@@ -59,7 +59,18 @@ module.exports = function (router) {
 
 		var cart = req.session.cart;
 		var Order = require('../../models/order');
-		var order = new Order({lineItems: cart.lineItems})
+
+		var lineItems = []
+		for (var item in cart)
+			lineItems.push(cart[item]);
+
+		var order = new Order({lineItems: lineItems})
+		order.status = 'initiated';
+		order.total = order.totalPrice();
+		var Payer = require('../../models/payer');
+		var payer = new Payer({firstName: firstName, lastName: lastName});
+		order.payers.push(payer);
+		order.save();
 
 		//Execute the payment.
 		paypal.payment.create(payment, {}, function (err, resp) {
@@ -76,7 +87,8 @@ module.exports = function (router) {
 				delete req.session.displayCart;
 				res.bundle.get({'bundle': 'messages', 'model': {}, 'locality': locality}, function bundleReturn(err, messages) {
 					order.status = 'paid';
-
+					console.log('order completed', order);
+					order.save();
 					res.render('result', {'result': messages.paymentSuccess, 'continueMessage': messages.keepShopping});
 				});
 			}

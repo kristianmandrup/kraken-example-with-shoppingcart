@@ -3,8 +3,9 @@ var productSchema = require('./product');
 
 //Define a super simple schema for our products.
 var lineItemSchema = mongoose.Schema({
-    id: String,
+    name: String,
     price: Number, // including any rebates
+    displayPrice: String,
     qty: Number,
     products: [productSchema]
 });
@@ -15,22 +16,19 @@ lineItemSchema.methods.product = function() {
 
 lineItemSchema.methods.setProduct = function(product) {
   this.products = this.products || [];
-  console.log('set product', product);
-  console.log(this.products);
   if (this.products.length == 0) {
-    console.log('push it!');
     this.products.push(product);
+    this.name = product.name;
   }
   this.updatePrice();
 }
 
 lineItemSchema.methods.updatePrice = function() {
-  console.log('update price!');
   this.price = this.qty * this.products[0].price / 2;
+  this.displayPrice = this.prettyPrice();
 }
 
-lineItemSchema.post('save', function (next) {
-  console.log('post save!');
+lineItemSchema.pre('save', function (next) {
   this.updatePrice();
   next();
 });

@@ -23,24 +23,18 @@ module.exports = function (router) {
 			return;
 		}
 
-		console.log('Calc Display cart!!');
 		var displayCart = {items: [], total: 0};
 		var total = 0;
 
 		//Ready the products for display
 		for (var item in cart) {
-			console.log('item', item);
 			var cartItem = cart[item];
-			console.log('cart item', cartItem);
 			displayCart.items.push(cartItem);
 
 			total += (cartItem.qty * cartItem.price);
-			console.log('total', total, cartItem.qty, cartItem.price);
 		}
 
 		req.session.total = displayCart.total = total.toFixed(2);
-		console.log('Display', displayCart, total);
-
 		cartLength = Object.keys(cart).length;
 
 		var model =
@@ -67,7 +61,6 @@ module.exports = function (router) {
 			var LineItem = require('../../models/line-item');
 			var newLineItem = new LineItem({qty: orderObj.qty});
 			newLineItem.setProduct(product.obj);
-			console.log('newLineItem', newLineItem);
 			cart[id] = newLineItem;
 		}
 		return cart;
