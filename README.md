@@ -1,12 +1,16 @@
-# with.shoppingcart
+with.shoppingcart
+=================
 
 Kraken with Shopping Cart and PayPal integration
 
-## Prerequisites
-* This example requires that [MongoDB](http://www.mongodb.org/downloads) is installed and running on it's default port.
-* You will -- of course -- need [Node](http://nodejs.org) (Version >= 0.10.22 preferred)
+Prerequisites
+-------------
 
-## Installation
+-	This example requires that [MongoDB](http://www.mongodb.org/downloads) is installed and running on it's default port.
+-	You will -- of course -- need [Node](http://nodejs.org) (Version >= 0.10.22 preferred)
+
+Installation
+------------
 
 Clone, install and run.
 
@@ -17,20 +21,49 @@ npm install
 npm start
 ```
 
-## Explore the app
+Extras
+------
+
+Expanding the basic sample with Line Items and Orders. Line Items enables rebates (special offers etc) and the Order grants an order id, the ability to store the entire order with related line items and one place to calculate the total etc. Tracking purposes, print Invoices etc.
+
+For PDF creation, you can start with a small [pdf crowd account](http://pdfcrowd.com/pricing/) of 1000 tokens. A free solution would be [freehtmltopdf](http://freehtmltopdf.com/api.html) which even includes a ready made button with progress bar.
+
+Other PDF Invoice options:
+
+-	https://github.com/pdfkit/pdfkit
+-	https://github.com/marcbachmann/node-html-pdf
+
+```js
+var pdf = require('html-pdf');
+pdf.create(html).toFile([filepath, ]function(err, res){
+  console.log(res.filename);
+});
+
+pdf.create(html).toStream(function(err, stream){
+  stream.pipe(fs.createWriteStream('./foo.pdf'));
+});
+
+pdf.create(html).toBuffer(function(err, buffer){
+  console.log('This is a buffer:', Buffer.isBuffer(buffer));
+});
+```
+
+Explore the app
+---------------
 
 Visit [`http://localhost:8000`](http://localhost:8000)
 
-## Illustrates
+Illustrates
+-----------
 
-* Use of mongodb for storing product information
-* Integration with the PayPal SDK
-* Localized content (en-US or es-ES)
-* Usage of bundalo for localized messages with model data
+-	Use of mongodb for storing product information
+-	Integration with the PayPal SDK
+-	Localized content (en-US or es-ES)
+-	Usage of bundalo for localized messages with model data
 
 ### lib/spec.js
 
-`lib/spec.js` holds the `onconfig` event handler. You can see in the main `index.js` file, `lib/spec`'s onconfig handler is passed in with the line: 
+`lib/spec.js` holds the `onconfig` event handler. You can see in the main `index.js` file, `lib/spec`'s onconfig handler is passed in with the line:
 
 ```javascript
 app.use(kraken(options))
@@ -41,6 +74,7 @@ app.use(kraken(options))
 Pre-requisite: An instance of [MongoDB](http://www.mongodb.org/downloads) installed and running on its default port.
 
 config changes (config.json):
+
 ```javascript
 "databaseConfig": {
 	"host": "localhost",
@@ -48,8 +82,7 @@ config changes (config.json):
 },
 ```
 
-`lib/database.js`: configure and connect to mongodb instance
-`lib/spec.js`: call database.js config method in the kraken-js onconfig event
+`lib/database.js`: configure and connect to mongodb instance`lib/spec.js`: call database.js config method in the kraken-js onconfig event
 
 ### PayPal SDK
 
@@ -69,6 +102,7 @@ Payment initiated in the `/pay` route which is defined in controllers/pay/index.
 ### Localized content
 
 config changes (config.json):
+
 ```javascript
 "i18n": {
 	"contentPath": "path:./locales",
@@ -77,6 +111,7 @@ config changes (config.json):
 ```
 
 config changes (config.json) under middleware:
+
 ```javascript
 "locale": {
 	"priority": 95,
@@ -94,6 +129,7 @@ locale is set into the response via the locale middleware defined in `lib/locale
 ### Localized model data with bundalo
 
 config changes (config.json):
+
 ```javascript
 "bundle engine": "dust",
 ```
